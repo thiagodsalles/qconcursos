@@ -34,13 +34,24 @@ class QuestionSearchQuery
   end
 
   def search_by_year(year)
-    query = QuestionAccess.where(date: Date.parse("#{year}-01-01")..Date.parse("#{year}-12-31"))
+    year_dates = Date.parse("#{year}-01-01")..Date.parse("#{year}-12-31")
+
+    query = QuestionAccess.where(date: year_dates)
     query_treatment(query)
   end
 
   def query_treatment(query)
-    hash = query.group(:question_id).sum(:times_accessed).sort_by { |_,v| v }.reverse!.first(5)
+    hash = query.group(:question_id)
+                .sum(:times_accessed)
+                .sort_by { |_,v| v }
+                .reverse!
+                .first(quantity)
+
     find_associated_questions(hash)
+  end
+
+  def quantity
+    @params[:quantity] ? @params[:quantity].to_i : 3
   end
 
   def find_associated_questions(hash)
