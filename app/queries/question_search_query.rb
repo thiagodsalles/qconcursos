@@ -18,25 +18,23 @@ class QuestionSearchQuery
   private
 
   def search_by_week(week, year)
-    week_begin = Date.commercial(year.to_i, week.to_i, 1)
-    week_end = Date.commercial(year.to_i, week.to_i, 7)
+    date = DateTransformService.week(week, year)
+    query = QuestionAccess.where(date: date)
 
-    query = QuestionAccess.where(date: week_begin..week_end)
     query_treatment(query)
   end
 
   def search_by_month(month, year)
-    first_day = Date.new(year.to_i, month.to_i, 1)
-    last_day = Date.new(year.to_i, month.to_i, -1)
+    date = DateTransformService.week(month, year)
+    query = QuestionAccess.where(date: date)
 
-    query = QuestionAccess.where(date: first_day..last_day)
     query_treatment(query)
   end
 
   def search_by_year(year)
-    year_dates = Date.parse("#{year}-01-01")..Date.parse("#{year}-12-31")
+    date = DateTransformService.year(year)
+    query = QuestionAccess.where(date: date)
 
-    query = QuestionAccess.where(date: year_dates)
     query_treatment(query)
   end
 
