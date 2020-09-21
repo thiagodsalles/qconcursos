@@ -36,7 +36,7 @@ class QuestionSearchQuery
     hash = QuestionAccess.where(date: date)
                          .group(:question_id)
                          .sum(:times_accessed)
-                         .sort_by { |_,v| v }
+                         .sort_by { |_, v| v }
                          .reverse!
                          .first(quantity)
 
@@ -48,6 +48,6 @@ class QuestionSearchQuery
   end
 
   def find_associated_questions(hash)
-    hash.map { |k,_| Question.find(k) }
+    hash.map { |k, _| Question.find(k) }
   end
 end

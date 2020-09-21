@@ -1,7 +1,6 @@
 module Api
   module V1
     class QuestionsController < ApplicationController
-
       def index
         questions_result = QuestionSearchQuery.new(params).call
 
@@ -14,9 +13,9 @@ module Api
         begin
           question = Question.insert_all(
             JSON.parse(question_file),
-            returning: %w[ id statement text answer daily_access discipline created_at ]
+            returning: %w[id statement text answer daily_access discipline created_at]
           )
-        rescue => e
+        rescue StandardError => e
           render json: e.message, status: :internal_server_error and return
         end
 

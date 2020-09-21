@@ -7,7 +7,6 @@ class CreateQuestions < ActiveRecord::Migration[6.0]
       t.integer :daily_access
       t.string :discipline
       t.datetime :created_at
-
     end
   end
 end

@@ -114,4 +114,3 @@ RSpec.describe 'Questions', type: :request do
     end
   end
 end
-

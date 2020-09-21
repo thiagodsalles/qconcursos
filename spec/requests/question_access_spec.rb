@@ -13,5 +13,3 @@ RSpec.describe 'QuestionAccess', type: :request do
     end
   end
 end
-
-

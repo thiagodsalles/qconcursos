@@ -18,5 +18,3 @@ RSpec.describe 'Disciplines', type: :request do
     end
   end
 end
-
-
