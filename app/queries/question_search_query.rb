@@ -4,10 +4,10 @@ class QuestionSearchQuery
   end
 
   def call
-    if @params[:week] && @params[:year]
+    if @params[:week]
       search_by_week(@params[:week], @params[:year])
 
-    elsif @params[:month] && @params[:year]
+    elsif @params[:month]
       search_by_month(@params[:month], @params[:year])
 
     elsif @params[:year]
@@ -19,31 +19,26 @@ class QuestionSearchQuery
 
   def search_by_week(week, year)
     date = DateTransformService.week(week, year)
-    query = QuestionAccess.where(date: date)
-
-    query_treatment(query)
+    query(date)
   end
 
   def search_by_month(month, year)
-    date = DateTransformService.week(month, year)
-    query = QuestionAccess.where(date: date)
-
-    query_treatment(query)
+    date = DateTransformService.month(month, year)
+    query(date)
   end
 
   def search_by_year(year)
     date = DateTransformService.year(year)
-    query = QuestionAccess.where(date: date)
-
-    query_treatment(query)
+    query(date)
   end
 
-  def query_treatment(query)
-    hash = query.group(:question_id)
-                .sum(:times_accessed)
-                .sort_by { |_,v| v }
-                .reverse!
-                .first(quantity)
+  def query(date)
+    hash = QuestionAccess.where(date: date)
+                         .group(:question_id)
+                         .sum(:times_accessed)
+                         .sort_by { |_,v| v }
+                         .reverse!
+                         .first(quantity)
 
     find_associated_questions(hash)
   end
